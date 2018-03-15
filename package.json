@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/js/app.js",
   "scripts": {
-    "build": "webpack -p",
+    "build": "NODE_ENV=production webpack -p",
     "serve": "webpack-dev-server"
   },
   "keywords": [],
