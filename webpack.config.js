@@ -4,6 +4,7 @@ const ExtractTextPlugin =  require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const bootstrapEntryPoints = require('./webpack.bootstrap.config.js');
 
 const isProd = process.env.NODE_ENV === 'production';
 const cssDev = ['style-loader','css-loader','postcss-loader','sass-loader'];
@@ -16,10 +17,12 @@ const cssProd = ExtractTextPlugin.extract({
   ]
 })
 const cssConfig = isProd ? cssProd : cssDev;
+const bootstrapConfig = isProd ? bootstrapEntryPoints.prod : bootstrapEntryPoints.dev;
 
 module.exports = {
   entry: {
-    main: './src/js/app.js'
+    main: './src/js/app.js',
+    bootstrap: bootstrapConfig
   },
   output: {
     filename: '[name].bundle.js',
@@ -35,21 +38,16 @@ module.exports = {
     rules: [
       {
         test: /\.scss$/,
-        use: cssConfig/*,
-        use: ['style-loader','css-loader','postcss-loader','sass-loader']
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {loader: 'css-loader', options: {sourceMap: true}}, 
-            {loader: 'postcss-loader', options: {sourceMap: true}}, 
-            {loader: 'sass-loader', options: {sourceMap: true}} 
-          ]
-        })*/
+        use: cssConfig
       },
       {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.(jpe?g|gif|png|svg)$/,
+        use: 'file-loader?name=[hash:7].[ext]&outputPath=imgs/'
       }
     ]
   },
@@ -70,6 +68,9 @@ module.exports = {
     }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.ProvidePlugin({
+      "window.Tether": "tether"
+    }),
     new BrowserSyncPlugin(
       // BrowserSync options
       {
