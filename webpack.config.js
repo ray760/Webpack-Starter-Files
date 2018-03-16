@@ -35,21 +35,16 @@ module.exports = {
     rules: [
       {
         test: /\.scss$/,
-        use: cssConfig/*,
-        use: ['style-loader','css-loader','postcss-loader','sass-loader']
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {loader: 'css-loader', options: {sourceMap: true}}, 
-            {loader: 'postcss-loader', options: {sourceMap: true}}, 
-            {loader: 'sass-loader', options: {sourceMap: true}} 
-          ]
-        })*/
+        use: cssConfig
       },
       {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.(jpe?g|gif|png|svg)$/,
+        use: 'file-loader?name=[hash:7].[ext]&outputPath=imgs/'
       }
     ]
   },
