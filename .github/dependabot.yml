@@ -1,0 +1,17 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: elliptic
+    versions:
+    - 6.5.3
+  - dependency-name: cssnano
+    versions:
+    - 4.1.10
+  - dependency-name: decompress-zip
+    versions:
+    - 0.3.2
